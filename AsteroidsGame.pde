@@ -1,7 +1,7 @@
 SpaceShip ship=new SpaceShip();
-Star [] space=new Star[200];
-ArrayList <Asteroid> rock;
-ArrayList <Beam> laser;
+Star [] space=new Star[100];
+ArrayList <Asteroid> rockList;
+ArrayList <Beam> laserList;
 public void setup() 
 {
   size(500,500);
@@ -9,12 +9,12 @@ public void setup()
   {
     space[i]=new Star((int)(Math.random()*500),(int)(Math.random()*500));
   }
-  rock=new ArrayList <Asteroid>();
+  rockList=new ArrayList <Asteroid>();
   for(int i=0;i<5;i++)
   {
-    rock.add(new Asteroid((int)(Math.random()*500),(int)(Math.random()*500)));
+    rockList.add(new Asteroid((int)(Math.random()*500),(int)(Math.random()*500)));
   }
-  laser=new ArrayList <Beam>();
+  laserList=new ArrayList <Beam>();
 }
 public void draw() 
 {
@@ -23,19 +23,19 @@ public void draw()
   {
     space[i].show();
   }
-  for(int i=0;i<rock.size();i++)
+  for(int i=0;i<rockList.size();i++)
   {
-    Asteroid rockList=rock.get(i);
-    rockList.move();
-    rockList.show();
+    Asteroid rock=rockList.get(i);
+    rock.move();
+    rock.show();
   }
-  for(int i=0;i<laser.size();i++)
+  for(int i=0;i<laserList.size();i++)
   {
-    Beam laserList=laser.get(i);
-    laserList.move();
-    laserList.show();
+    Beam laser=laserList.get(i);
+    laser.move();
+    laser.show();
   }
-      for(int i=0;i<laser.size();i++)
+      for(int i=0;i<laserList.size();i++)
       {
         System.out.println(i);
       }
@@ -72,7 +72,7 @@ void keyPressed()
   {
     for(int i=0;i<3;i++)
     {
-      laser.add(new Beam(ship));
+      laserList.add(new Beam(ship));
 
     }
   }
@@ -95,6 +95,7 @@ class Star
   public void show()
   {
     stroke(starR,starG,starB);
+    strokeWeight(3);
     point(starX,starY);
   }
 }
@@ -143,8 +144,8 @@ class Beam extends Floater
   {
     myPointDirection=ship.myPointDirection;
     double dRadians=myPointDirection*(Math.PI/180);
-    myDirectionX=3*Math.cos(dRadians);
-    myDirectionY=3*Math.sin(dRadians);
+    myDirectionX=50*Math.cos(dRadians);
+    myDirectionY=50*Math.sin(dRadians);
     myCenterX=5*Math.cos(dRadians)+ship.myDirectionX+ship.myCenterX;
     myCenterY=5*Math.sin(dRadians)+ship.myDirectionY+ship.myCenterY;
     myColorR=0;
