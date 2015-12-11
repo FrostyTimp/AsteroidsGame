@@ -28,19 +28,39 @@ public void draw()
     Asteroid rock=rockList.get(i);
     rock.move();
     rock.show();
+    for(int beamI=0;beamI<laserList.size();beamI++)
+    {
+      if(dist((float)laserList.get(beamI).getX(),(float)laserList.get(beamI).getY(),(float)rockList.get(i).getX(),(float)rockList.get(i).getY())<20)
+      {
+        rockList.remove(i);
+        laserList.remove(beamI);
+        i--;
+      }
+    }
   }
   for(int i=0;i<laserList.size();i++)
   {
     Beam laser=laserList.get(i);
     laser.move();
     laser.show();
-  }
-      for(int i=0;i<laserList.size();i++)
-      {
-        System.out.println(i);
-      }
+    if(laserList.get(i).getX()<0||laserList.get(i).getY()<0||laserList.get(i).getX()>500||laserList.get(i).getX()>500)
+    {
+      laserList.remove(i);
+      i--;
+    }
+   }
   ship.move();
-  ship.show();   
+  ship.show();
+  if(rockList.size()==0)
+  {
+    background(0);
+    textSize(50);
+    textAlign(CENTER);
+    fill(255);
+    text("error",250,250);
+  }
+
+  System.out.println(laserList.size());
 }
 void keyPressed()
 {
@@ -54,27 +74,23 @@ void keyPressed()
   }
   if(keyCode==RIGHT)
   {
-    ship.myPointDirection+=45;
+    ship.myPointDirection+=15;
   }
   if(keyCode==LEFT)
-  {
-    ship.myPointDirection-=45;
+  {    
+    ship.myPointDirection-=15;
   }
   if(keyCode==SHIFT)
   {
     ship.setX((int)(Math.random()*500));
     ship.setY((int)(Math.random()*500));
-    ship.myDirectionX=0;
-    ship.myDirectionY=0;
-    ship.myPointDirection=90;
+    ship.setDirectionX(0);
+    ship.setDirectionY(0);
+    ship.setPointDirection(90);
   }
   if(key==' ')
   {
-    for(int i=0;i<3;i++)
-    {
       laserList.add(new Beam(ship));
-
-    }
   }
 }
 class Star
@@ -142,12 +158,12 @@ class Beam extends Floater
   public double getPointDirection(){return myPointDirection;}
   Beam(SpaceShip ship)
   {
-    myPointDirection=ship.myPointDirection;
+    myPointDirection=ship.getPointDirection();
     double dRadians=myPointDirection*(Math.PI/180);
-    myDirectionX=50*Math.cos(dRadians);
-    myDirectionY=50*Math.sin(dRadians);
-    myCenterX=5*Math.cos(dRadians)+ship.myDirectionX+ship.myCenterX;
-    myCenterY=5*Math.sin(dRadians)+ship.myDirectionY+ship.myCenterY;
+    myDirectionX=20*Math.cos(dRadians);
+    myDirectionY=20*Math.sin(dRadians);
+    myCenterX=5*Math.cos(dRadians)+ship.getDirectionX()+ship.getX();
+    myCenterY=5*Math.sin(dRadians)+ship.getDirectionY()+ship.getY();
     myColorR=0;
     myColorG=255;
     myColorB=0;
@@ -158,9 +174,6 @@ class Beam extends Floater
     stroke(myColorR,myColorG,myColorB);
     fill(myColorR,myColorG,myColorB);
     ellipse((float)myCenterX,(float)myCenterY,5,5);
-    // line((float)myCenterX,(float)myCenterY,(float)myCenterX+50*(float)(Math.cos(myPointDirection*(Math.PI/180))),(float)myCenterY+50*(float)(Math.sin(myPointDirection*(Math.PI/180))));
-    // beamX+=5*Math.cos(beamDirection*(Math.PI/180));
-    // beamY+=5*Math.sin(beamDirection*(Math.PI/180));
   }
   public void move()
   {
@@ -239,7 +252,7 @@ abstract class Floater //Do NOT modify the Floater class! Make changes in the Sp
   {          
     //convert the current direction the floater is pointing to radians    
     double dRadians =myPointDirection*(Math.PI/180);     
-    //change coordinates of direction of travel    
+    //change coordinates of direction of travel     
     myDirectionX += ((dAmount) * Math.cos(dRadians));    
     myDirectionY += ((dAmount) * Math.sin(dRadians));       
   }   
