@@ -4,7 +4,7 @@ ArrayList <Asteroid> rockList;
 ArrayList <Beam> laserList;
 public void setup() 
 {
-  size(500,500);
+  size(500,500,P2D);
   for(int i=0;i<space.length;i++)
   {
     space[i]=new Star((int)(Math.random()*500),(int)(Math.random()*500));
